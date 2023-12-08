@@ -1,9 +1,8 @@
-tableextension 50100 CustomerTableExt extends Customer
+tableextension 50102 VendorTableExt extends Vendor
 {
     fields
     {
-        // Add changes to table fields here
-        field(50100; "Customer County"; Enum Counties)
+        field(50102; "Vendor County"; Enum vendorCounties)
         {
             DataClassification = ToBeClassified;
         }
@@ -22,4 +21,3 @@ tableextension 50100 CustomerTableExt extends Customer
     var
         myInt: Integer;
 }
- 

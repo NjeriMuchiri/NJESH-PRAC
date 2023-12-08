@@ -8,6 +8,4 @@ enum 50100 Counties
     value(3; "Nyanza"){}
     value(4; "Kisumu"){}
     value(5; "Lamu"){}
-
-
 }
