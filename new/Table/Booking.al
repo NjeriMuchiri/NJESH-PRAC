@@ -39,7 +39,17 @@ table 50104 Booking
                 end;
             end;
         }
-        field(2; "Customer"; code[20]){TableRelation=Customer;}
+        field(2; "Customer"; code[20])
+        {
+            TableRelation=Customer;
+            trigger OnValidate()
+            var
+            Cust: Record Customer;
+            begin
+                Cust.get(Customer);
+                "Customer Name" := Cust.Name;
+            end;
+        }
         field(3; "Customer Name"; text[100])
         {
             Editable = false;
@@ -73,6 +83,80 @@ table 50104 Booking
     var
         SalesSetup: Record "Sales & Receivables Setup";
         NoSeriesMgt: Codeunit NoSeriesManagement;
+    
+    trigger OnInsert()
+    begin
+        if "Booking No." = '' then begin
+            SalesSetup.Get();
+            SalesSetup.TestField("Booking Nos.");
+            NoSeriesMgt.InitSeries(SalesSetup."Booking Nos.", xRec."No. Series", 0D, "Booking No.", "No. Series");
+        end;
+        "Created By" := UserId;
+        "DateTime Created" := CurrentDateTime;
+        
+    end;
+    
+    trigger OnModify()
+    begin
+        
+    end;
+    
+    trigger OnDelete()
+    begin
+        
+    end;
+    
+    trigger OnRename()
+    begin
+        
+    end;
+}
+enumextension 50102 ResourceTypeExt extends "Resource Type"
+{
+    value(50100; Room)
+    {
+    }
+}
+table 50103 BookingLine
+{
+    DataClassification = ToBeClassified;
+    
+    fields
+    {
+        field(1;LineNo; Integer)
+        {
+            Editable=false;
+        }
+          field(2;BookingNo; code[10])
+        {
+            Editable=false;
+        }
+           field(3; HouseNo; code[20])
+        {
+            TableRelation = Resource where (Type = const(Room));
+            ValidateTableRelation = true;
+        }
+           field(4; HouseName; Text[100])
+        {
+            
+        }
+    }
+    
+    keys
+    {
+        key(pk; BookingNo, LineNo)
+        {
+            Clustered = true;
+        }
+    }
+    
+    fieldgroups
+    {
+        // Add changes to field groups here
+    }
+    
+    var
+        myInt: Integer;
     
     trigger OnInsert()
     begin
