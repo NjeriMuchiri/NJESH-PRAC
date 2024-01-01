@@ -125,21 +125,39 @@ table 50103 BookingLine
     {
         field(1;LineNo; Integer)
         {
-            Editable=false;
+            Editable = false;
         }
           field(2;BookingNo; code[10])
         {
-            Editable=false;
+            Editable = false;
         }
            field(3; HouseNo; code[20])
         {
             TableRelation = Resource where (Type = const(Room));
             ValidateTableRelation = true;
+            trigger OnValidate()
+            var
+               Room: Record Resource;
+            begin
+                Room.Get(HouseNo);
+                Room.TestField(Name);
+                Room.TestField("Unit Price");
+                HouseName := Room.Name;
+                CostPerUnit := Room."Unit Price";
+            end;
         }
            field(4; HouseName; Text[100])
         {
-            
+            Editable = false;
         }
+           field(5; CostPerUnit; Decimal)
+        {
+            Editable = false;
+        }
+           field(6; LineTotal; Decimal)
+           {
+            Editable = false;
+           }
     }
     
     keys
